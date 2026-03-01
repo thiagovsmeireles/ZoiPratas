@@ -2,6 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 const multer = require('multer');
 const bcrypt = require('bcryptjs');
 const Database = require('better-sqlite3');
@@ -10,14 +11,30 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const ROOT_DIR = __dirname;
-const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : ROOT_DIR;
+let DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : ROOT_DIR;
+
+const ensureWritableDir = (dirPath) => {
+  try {
+    fs.mkdirSync(dirPath, { recursive: true });
+    fs.accessSync(dirPath, fs.constants.W_OK);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+if (!ensureWritableDir(DATA_DIR)) {
+  const fallbackDataDir = path.join(os.tmpdir(), 'zoi-data');
+  ensureWritableDir(fallbackDataDir);
+  DATA_DIR = fallbackDataDir;
+  console.warn(`DATA_DIR sem permissão. Usando fallback: ${DATA_DIR}`);
+}
+
 const DB_PATH = path.join(DATA_DIR, 'database.sqlite');
 const UPLOAD_ROOT_DIR = path.join(DATA_DIR, 'uploads');
 const UPLOAD_DIR = path.join(UPLOAD_ROOT_DIR, 'produtos');
 
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-}
+fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 const db = new Database(DB_PATH);
 db.pragma('journal_mode = WAL');
