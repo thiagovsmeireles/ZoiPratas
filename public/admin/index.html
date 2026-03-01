@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin | Zói Pratas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="admin-body">
+  <main class="container admin-container">
+    <section id="loginSection" class="card">
+      <h2>Painel Administrativo</h2>
+      <form id="loginForm" class="grid-form">
+        <input type="text" name="username" placeholder="Usuário" value="admin" required />
+        <input type="password" name="password" placeholder="Senha" required />
+        <button class="btn btn-primary" type="submit">Entrar</button>
+      </form>
+    </section>
+
+    <section id="dashboardSection" class="hidden">
+      <div class="admin-topbar card">
+        <h2>Dashboard Zói Pratas</h2>
+        <button id="logoutBtn" class="btn btn-outline">Sair</button>
+      </div>
+
+      <div class="report-grid" id="reportGrid"></div>
+
+      <div class="admin-grid">
+        <article class="card">
+          <h3>Categorias</h3>
+          <form id="categoryForm" class="inline-form">
+            <input type="text" name="name" placeholder="Nova categoria" required />
+            <button class="btn btn-primary" type="submit">Salvar</button>
+          </form>
+          <ul id="categoryList" class="list"></ul>
+        </article>
+
+        <article class="card">
+          <h3>Produtos</h3>
+          <form id="productForm" class="grid-form" enctype="multipart/form-data">
+            <input type="hidden" name="id" />
+            <input type="text" name="name" placeholder="Nome do produto" required />
+            <select name="categoryId" id="productCategory"></select>
+            <input type="number" name="price" placeholder="Preço" min="0" step="0.01" required />
+            <select name="isPromo" id="productIsPromo">
+              <option value="0">Sem promoção</option>
+              <option value="1">Em promoção</option>
+            </select>
+            <input type="number" name="promoPrice" id="productPromoPrice" placeholder="Preço promocional" min="0" step="0.01" />
+            <input type="number" name="stock" placeholder="Estoque" min="0" step="1" value="0" required />
+            <select name="status">
+              <option value="available">Disponível</option>
+              <option value="unavailable">Indisponível</option>
+            </select>
+            <textarea name="description" placeholder="Descrição"></textarea>
+            <input type="file" name="images" accept="image/*" multiple />
+            <div class="modal-actions">
+              <button class="btn btn-outline" type="button" id="resetProductForm">Limpar</button>
+              <button class="btn btn-primary" type="submit">Salvar Produto</button>
+            </div>
+          </form>
+          <div id="productList" class="list products-admin"></div>
+        </article>
+      </div>
+
+      <article class="card">
+        <h3>Configurações</h3>
+        <form id="settingsForm" class="grid-form">
+          <input type="text" name="whatsapp_number" placeholder="WhatsApp (somente números)" required />
+          <input type="url" name="instagram_url" placeholder="URL do Instagram" required />
+          <input type="text" name="home_hero_text" placeholder="Texto principal da home" required />
+          <input type="text" name="home_subtitle_text" placeholder="Subtítulo da home" required />
+          <textarea name="whatsapp_message_footer" placeholder="Mensagem padrão do pedido"></textarea>
+          <input type="file" name="banner" id="bannerInput" accept="image/*" />
+          <button class="btn btn-primary" type="submit">Salvar Configurações</button>
+        </form>
+
+        <form id="passwordForm" class="inline-form top-gap">
+          <input type="password" name="currentPassword" placeholder="Senha atual" required />
+          <input type="password" name="newPassword" placeholder="Nova senha" required />
+          <button class="btn btn-outline" type="submit">Alterar senha</button>
+        </form>
+
+        <button id="exportBtn" class="btn btn-outline top-gap">Exportar Produtos (JSON)</button>
+      </article>
+
+      <article class="card">
+        <h3>Destaques da Home</h3>
+        <form id="highlightForm" class="grid-form">
+          <input type="hidden" name="id" />
+          <input type="text" name="title" placeholder="Título do destaque" required />
+          <textarea name="description" placeholder="Descrição do destaque" required></textarea>
+          <input type="number" name="sort_order" placeholder="Ordem (ex: 1, 2, 3)" min="0" step="1" value="0" required />
+          <select name="is_active">
+            <option value="1">Ativo</option>
+            <option value="0">Inativo</option>
+          </select>
+          <div class="modal-actions">
+            <button class="btn btn-outline" type="button" id="resetHighlightForm">Limpar</button>
+            <button class="btn btn-primary" type="submit">Salvar Destaque</button>
+          </div>
+        </form>
+        <div id="highlightList" class="list top-gap"></div>
+      </article>
+    </section>
+  </main>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>
